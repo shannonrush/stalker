@@ -20,6 +20,7 @@
 		C35681CC14255BE60015121A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35681AD14255BE50015121A /* Foundation.framework */; };
 		C35681D414255BE60015121A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C35681D214255BE60015121A /* InfoPlist.strings */; };
 		C35681D714255BE60015121A /* stalkerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C35681D614255BE60015121A /* stalkerTests.m */; };
+		C35681E114255D400015121A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35681E014255D400015121A /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		C35681D314255BE60015121A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C35681D514255BE60015121A /* stalkerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stalkerTests.h; sourceTree = "<group>"; };
 		C35681D614255BE60015121A /* stalkerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stalkerTests.m; sourceTree = "<group>"; };
+		C35681E014255D400015121A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C35681E114255D400015121A /* CoreLocation.framework in Frameworks */,
 				C35681AC14255BE50015121A /* UIKit.framework in Frameworks */,
 				C35681AE14255BE50015121A /* Foundation.framework in Frameworks */,
 				C35681B014255BE50015121A /* CoreGraphics.framework in Frameworks */,
@@ -100,6 +103,7 @@
 		C35681AA14255BE50015121A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C35681E014255D400015121A /* CoreLocation.framework */,
 				C35681AB14255BE50015121A /* UIKit.framework */,
 				C35681AD14255BE50015121A /* Foundation.framework */,
 				C35681AF14255BE50015121A /* CoreGraphics.framework */,
