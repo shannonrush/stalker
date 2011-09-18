@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C30C524E1426AF0F0079D879 /* NSString+escape.m in Sources */ = {isa = PBXBuildFile; fileRef = C30C524D1426AF0F0079D879 /* NSString+escape.m */; };
 		C35681AC14255BE50015121A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35681AB14255BE50015121A /* UIKit.framework */; };
 		C35681AE14255BE50015121A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35681AD14255BE50015121A /* Foundation.framework */; };
 		C35681B014255BE50015121A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35681AF14255BE50015121A /* CoreGraphics.framework */; };
@@ -21,6 +22,7 @@
 		C35681D414255BE60015121A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C35681D214255BE60015121A /* InfoPlist.strings */; };
 		C35681D714255BE60015121A /* stalkerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C35681D614255BE60015121A /* stalkerTests.m */; };
 		C35681E114255D400015121A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35681E014255D400015121A /* CoreLocation.framework */; };
+		C35681F0142563000015121A /* BaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = C35681EF142563000015121A /* BaseController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C30C524C1426AF0F0079D879 /* NSString+escape.h */ = {isa = PBXFileReference; fileEncoding = 4; path = "NSString+escape.h"; sourceTree = "<group>"; };
+		C30C524D1426AF0F0079D879 /* NSString+escape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+escape.m"; sourceTree = "<group>"; };
 		C35681A714255BE50015121A /* stalker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stalker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C35681AB14255BE50015121A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C35681AD14255BE50015121A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -54,6 +58,8 @@
 		C35681D514255BE60015121A /* stalkerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stalkerTests.h; sourceTree = "<group>"; };
 		C35681D614255BE60015121A /* stalkerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stalkerTests.m; sourceTree = "<group>"; };
 		C35681E014255D400015121A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C35681EE142563000015121A /* BaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseController.h; sourceTree = "<group>"; };
+		C35681EF142563000015121A /* BaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,10 +123,13 @@
 			children = (
 				C35681BA14255BE50015121A /* AppDelegate.h */,
 				C35681BB14255BE50015121A /* AppDelegate.m */,
-				C35681BD14255BE50015121A /* MainStoryboard.storyboard */,
+				C35681EE142563000015121A /* BaseController.h */,
+				C35681EF142563000015121A /* BaseController.m */,
 				C35681C014255BE50015121A /* ViewController.h */,
 				C35681C114255BE50015121A /* ViewController.m */,
 				C35681B214255BE50015121A /* Supporting Files */,
+				C30C524C1426AF0F0079D879 /* NSString+escape.h */,
+				C30C524D1426AF0F0079D879 /* NSString+escape.m */,
 			);
 			path = stalker;
 			sourceTree = "<group>";
@@ -128,6 +137,7 @@
 		C35681B214255BE50015121A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C35681BD14255BE50015121A /* MainStoryboard.storyboard */,
 				C35681B314255BE50015121A /* stalker-Info.plist */,
 				C35681B414255BE50015121A /* InfoPlist.strings */,
 				C35681B714255BE50015121A /* main.m */,
@@ -265,6 +275,8 @@
 				C35681B814255BE50015121A /* main.m in Sources */,
 				C35681BC14255BE50015121A /* AppDelegate.m in Sources */,
 				C35681C214255BE50015121A /* ViewController.m in Sources */,
+				C35681F0142563000015121A /* BaseController.m in Sources */,
+				C30C524E1426AF0F0079D879 /* NSString+escape.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +374,7 @@
 		C35681DB14255BE60015121A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "stalker/stalker-Prefix.pch";
 				INFOPLIST_FILE = "stalker/stalker-Info.plist";
@@ -373,6 +386,7 @@
 		C35681DC14255BE60015121A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "stalker/stalker-Prefix.pch";
 				INFOPLIST_FILE = "stalker/stalker-Info.plist";
@@ -434,6 +448,7 @@
 				C35681DC14255BE60015121A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C35681DD14255BE60015121A /* Build configuration list for PBXNativeTarget "stalkerTests" */ = {
 			isa = XCConfigurationList;
@@ -442,6 +457,7 @@
 				C35681DF14255BE60015121A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

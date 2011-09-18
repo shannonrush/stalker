@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface ViewController : UIViewController <CLLocationManagerDelegate> {
+#import "BaseController.h"
+
+@interface ViewController : BaseController <CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
 }
+
 
 @end
