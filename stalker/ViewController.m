@@ -18,6 +18,7 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager setDelegate:self];
     [locationManager startUpdatingLocation];
+    lastLocationDate = [[NSDate alloc]initWithTimeIntervalSinceNow:-60];
 }
 
 #pragma mark CLLocationManagerDelegate
@@ -25,10 +26,16 @@
 
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
+    NSTimeInterval age = [newLocation.timestamp timeIntervalSinceNow];
+    // make sure location is fresh and get new data only once every minute
+    if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < -60)  {
+        NSLog(@"calling foursquare");
+        NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
                                newLocation.coordinate.latitude,
-                               newLocation.coordinate.longitude];                            ;
-    [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
+                               newLocation.coordinate.longitude];
+        [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
+        lastLocationDate = [NSDate date];
+    }
 }
 
 #pragma mark HTTP
@@ -45,7 +52,7 @@
             NSString *name = [destination objectForKey:@"name"];
             [dataString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
         }
-        NSString *urlString = @"http://10.0.1.17:3000/stalker_tracks.json";
+        NSString *urlString = @"http://rushdevo.com/stalker_tracks.json";
         [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
     }
 }

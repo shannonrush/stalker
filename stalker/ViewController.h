@@ -13,6 +13,7 @@
 
 @interface ViewController : BaseController <CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
+    NSDate *lastLocationDate;
 }
 
 
