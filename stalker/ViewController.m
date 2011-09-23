@@ -8,33 +8,97 @@
 
 #import "ViewController.h"
 #import "NSString+escape.h"
+#import "Reachability.h"
 
 @implementation ViewController
 
+@synthesize internetActive, hostActive;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initLocation];
+    [self initReachability];
+}
+
+#pragma mark CLLocationManagerDelegate
+
+-(void)initLocation {
     if (!locationManager) 
         locationManager = [[CLLocationManager alloc] init];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager setDelegate:self];
     [locationManager startUpdatingLocation];
-    lastLocationDate = [[NSDate alloc]initWithTimeIntervalSinceNow:-60];
+    lastLocationDate = [[NSDate alloc]initWithTimeIntervalSinceNow:-300];
 }
-
-#pragma mark CLLocationManagerDelegate
-
-
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     NSTimeInterval age = [newLocation.timestamp timeIntervalSinceNow];
     // make sure location is fresh and get new data only once every minute
-    if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < -60)  {
-        NSLog(@"calling foursquare");
+    if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < -300)  {
+        NSLog(@"calling google");
         NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
                                newLocation.coordinate.latitude,
                                newLocation.coordinate.longitude];
         [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
         lastLocationDate = [NSDate date];
+    }
+}
+
+#pragma mark Reachability
+
+-(void)initReachability {
+    // check for internet connection
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    
+    internetReachable = [Reachability reachabilityForInternetConnection];
+    [internetReachable startNotifier];
+    
+    // check if a pathway to a random host exists
+    hostReachable = [Reachability reachabilityWithHostName:@"www.rushdevo.com"];
+    [hostReachable startNotifier];
+    
+    // now patiently wait for the notification
+}
+
+- (void) checkNetworkStatus:(NSNotification *)notice {
+    // called after network status changes
+    
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus) {
+        case NotReachable: {
+            NSLog(@"The internet is down.");
+            self.internetActive = NO;
+            break;
+        }
+        case ReachableViaWiFi: {
+            NSLog(@"The internet is working via WIFI.");
+            self.internetActive = YES;
+            break;
+        }
+        case ReachableViaWWAN:{
+            NSLog(@"The internet is working via WWAN.");
+            self.internetActive = YES;
+            break;
+        }
+    }
+    
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus) {
+        case NotReachable: {
+            NSLog(@"A gateway to the host server is down.");
+            self.hostActive = NO;
+            break;
+        }
+        case ReachableViaWiFi: {
+            NSLog(@"A gateway to the host server is working via WIFI.");
+            self.hostActive = YES;
+            break;
+        }
+        case ReachableViaWWAN: {
+            NSLog(@"A gateway to the host server is working via WWAN.");
+            self.hostActive = YES;
+            break;
+        }
     }
 }
 
@@ -56,6 +120,5 @@
         [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
     }
 }
-
 
 @end
