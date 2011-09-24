@@ -30,5 +30,8 @@
 -(void)initReachability;
 - (void)checkNetworkStatus:(NSNotification *)notice;
 
+-(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude;
+-(void)savePendingTrackWithLatitude:(double)latitude WithLongitude:(double)longitude;
+
 
 @end

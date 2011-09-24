@@ -26,6 +26,7 @@
 		C3EC0972142A87A7006C4789 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3EC0971142A87A7006C4789 /* SystemConfiguration.framework */; };
 		C3EC0976142A8802006C4789 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C3EC0975142A8802006C4789 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C3FC0396142C0FC900AC300A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FC0395142C0FC900AC300A /* CoreData.framework */; };
+		C3FC039D142D000E00AC300A /* stalker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3FC039B142D000E00AC300A /* stalker.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		C3EC0974142A8802006C4789 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C3EC0975142A8802006C4789 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C3FC0395142C0FC900AC300A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C3FC039C142D000E00AC300A /* stalker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = stalker.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				C35681B414255BE50015121A /* InfoPlist.strings */,
 				C35681B714255BE50015121A /* main.m */,
 				C35681B914255BE50015121A /* stalker-Prefix.pch */,
+				C3FC039B142D000E00AC300A /* stalker.xcdatamodeld */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				C35681F0142563000015121A /* BaseController.m in Sources */,
 				C30C524E1426AF0F0079D879 /* NSString+escape.m in Sources */,
 				C3EC0976142A8802006C4789 /* Reachability.m in Sources */,
+				C3FC039D142D000E00AC300A /* stalker.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +478,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C3FC039B142D000E00AC300A /* stalker.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C3FC039C142D000E00AC300A /* stalker.xcdatamodel */,
+			);
+			currentVersion = C3FC039C142D000E00AC300A /* stalker.xcdatamodel */;
+			path = stalker.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C356819E14255BE40015121A /* Project object */;
 }

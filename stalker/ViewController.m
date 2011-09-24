@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "NSString+escape.h"
 #import "Reachability.h"
+#import "AppDelegate.h"
 
 @implementation ViewController
 
@@ -35,13 +36,33 @@
     NSTimeInterval age = [newLocation.timestamp timeIntervalSinceNow];
     // make sure location is fresh and get new data only once every minute
     if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < -300)  {
-        NSLog(@"calling google");
-        NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
-                               newLocation.coordinate.latitude,
-                               newLocation.coordinate.longitude];
-        [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
+        if (internetActive && hostActive) {
+
+        } else {
+            [self savePendingTrackWithLatitude:newLocation.coordinate.latitude WithLongitude:newLocation.coordinate.longitude];
+        }
         lastLocationDate = [NSDate date];
     }
+}
+
+-(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude {
+    NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
+                           latitude,
+                           longitude];
+    [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
+}
+
+-(void)savePendingTrackWithLatitude:(double)latitude WithLongitude:(double)longitude {
+    AppDelegate *appDelegate=[[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext*context=[appDelegate managedObjectContext];
+    NSManagedObject *track=[NSEntityDescription
+                            insertNewObjectForEntityForName:@"PendingTrack"
+                            inManagedObjectContext:context];    
+    [track setValue:[NSNumber numberWithDouble:latitude] forKey:@"lat"];
+    [track setValue:[NSNumber numberWithDouble:longitude] forKey:@"lng"];
+    [track setValue:[NSDate date] forKey:@"timestamp"];
+    NSError *error;
+    [context save:&error];
 }
 
 #pragma mark Reachability
