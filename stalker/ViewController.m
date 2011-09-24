@@ -7,9 +7,9 @@
 //
 
 #import "ViewController.h"
-#import "NSString+escape.h"
 #import "Reachability.h"
 #import "AppDelegate.h"
+#import "PendingTrack.h"
 
 @implementation ViewController
 
@@ -19,6 +19,9 @@
     [super viewDidLoad];
     [self initLocation];
     [self initReachability];
+    pending = [[PendingTrack alloc]init];
+    pendingTracks = [[NSMutableArray alloc]init];
+
 }
 
 #pragma mark CLLocationManagerDelegate
@@ -37,32 +40,12 @@
     // make sure location is fresh and get new data only once every minute
     if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < -300)  {
         if (internetActive && hostActive) {
-
+            [self getDestinationInfoWithLatitude:newLocation.coordinate.latitude WithLongitude:newLocation.coordinate.longitude];
         } else {
-            [self savePendingTrackWithLatitude:newLocation.coordinate.latitude WithLongitude:newLocation.coordinate.longitude];
+            [pending savePendingTrackWithLatitude:newLocation.coordinate.latitude WithLongitude:newLocation.coordinate.longitude];
         }
         lastLocationDate = [NSDate date];
     }
-}
-
--(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude {
-    NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
-                           latitude,
-                           longitude];
-    [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
-}
-
--(void)savePendingTrackWithLatitude:(double)latitude WithLongitude:(double)longitude {
-    AppDelegate *appDelegate=[[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext*context=[appDelegate managedObjectContext];
-    NSManagedObject *track=[NSEntityDescription
-                            insertNewObjectForEntityForName:@"PendingTrack"
-                            inManagedObjectContext:context];    
-    [track setValue:[NSNumber numberWithDouble:latitude] forKey:@"lat"];
-    [track setValue:[NSNumber numberWithDouble:longitude] forKey:@"lng"];
-    [track setValue:[NSDate date] forKey:@"timestamp"];
-    NSError *error;
-    [context save:&error];
 }
 
 #pragma mark Reachability
@@ -121,15 +104,35 @@
             break;
         }
     }
+    if (self.internetActive && self.hostActive && [self hasPendingTracks]) {
+        [pending performSelectorInBackground:@selector(sendTracks) withObject:pendingTracks];
+    }
+}
+
+-(BOOL)hasPendingTracks {
+    AppDelegate *appDelegate=[[UIApplication sharedApplication]delegate];
+    NSManagedObjectContext *context=[appDelegate managedObjectContext];
+    NSEntityDescription *entityDesc=[NSEntityDescription entityForName:@"PendingTrack" inManagedObjectContext:context];
+    NSFetchRequest *request=[[NSFetchRequest alloc]init];
+    [request setEntity:entityDesc];
+    NSError *error;
+    NSArray *tracks=[context executeFetchRequest:request error:&error];
+    if ([tracks count]>0) {
+        [pendingTracks setArray:tracks];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 #pragma mark HTTP
 
 -(void) handleAsynchResponse:(id)data {
     if ([[data allKeys]containsObject:@"response"]) {
-        NSMutableString *dataString = [NSMutableString stringWithFormat:@"[stalker_track]stalker_user_id=1&[stalker_track]lat=%g&[stalker_track]lng=%g",
+        NSMutableString *dataString = [NSMutableString stringWithFormat:@"[stalker_track]stalker_user_id=1&[stalker_track]lat=%g&[stalker_track]lng=%g&[stalker_track]track_at=%@",
                                     locationManager.location.coordinate.latitude,
-                                    locationManager.location.coordinate.longitude];
+                                    locationManager.location.coordinate.longitude,
+                                       [NSDate date]];
         NSArray *destinations = [[data objectForKey:@"response"]objectForKey:@"venues"];
         for (NSDictionary *destination in destinations) {
             NSArray *categories = [destination objectForKey:@"categories"];
@@ -137,7 +140,7 @@
             NSString *name = [destination objectForKey:@"name"];
             [dataString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
         }
-        NSString *urlString = @"http://rushdevo.com/stalker_tracks.json";
+        NSString *urlString = @"http://10.0.1.17:3000/stalker_tracks.json";
         [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
     }
 }

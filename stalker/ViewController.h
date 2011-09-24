@@ -11,12 +11,14 @@
 
 #import "BaseController.h"
 
+@class PendingTrack;
 @class Reachability;
 
 @interface ViewController : BaseController <CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
     NSDate *lastLocationDate;
-    
+    NSMutableArray *pendingTracks;
+    PendingTrack *pending;
     Reachability* internetReachable;
     Reachability* hostReachable;
     BOOL internetActive;
@@ -28,10 +30,8 @@
 
 -(void)initLocation;
 -(void)initReachability;
-- (void)checkNetworkStatus:(NSNotification *)notice;
-
--(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude;
--(void)savePendingTrackWithLatitude:(double)latitude WithLongitude:(double)longitude;
+-(void)checkNetworkStatus:(NSNotification *)notice;
+-(BOOL)hasPendingTracks;
 
 
 @end

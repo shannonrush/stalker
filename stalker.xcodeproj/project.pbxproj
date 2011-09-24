@@ -27,6 +27,7 @@
 		C3EC0976142A8802006C4789 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C3EC0975142A8802006C4789 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C3FC0396142C0FC900AC300A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3FC0395142C0FC900AC300A /* CoreData.framework */; };
 		C3FC039D142D000E00AC300A /* stalker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3FC039B142D000E00AC300A /* stalker.xcdatamodeld */; };
+		C3FC03A1142E04CD00AC300A /* PendingTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = C3FC03A0142E04CD00AC300A /* PendingTrack.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,8 @@
 		C3EC0975142A8802006C4789 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C3FC0395142C0FC900AC300A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C3FC039C142D000E00AC300A /* stalker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = stalker.xcdatamodel; sourceTree = "<group>"; };
+		C3FC039F142E04CD00AC300A /* PendingTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PendingTrack.h; sourceTree = "<group>"; };
+		C3FC03A0142E04CD00AC300A /* PendingTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingTrack.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,8 @@
 				C35681C014255BE50015121A /* ViewController.h */,
 				C35681C114255BE50015121A /* ViewController.m */,
 				C3EC0974142A8802006C4789 /* Reachability.h */,
+				C3FC039F142E04CD00AC300A /* PendingTrack.h */,
+				C3FC03A0142E04CD00AC300A /* PendingTrack.m */,
 				C3EC0975142A8802006C4789 /* Reachability.m */,
 				C35681B214255BE50015121A /* Supporting Files */,
 				C30C524C1426AF0F0079D879 /* NSString+escape.h */,
@@ -295,6 +300,7 @@
 				C30C524E1426AF0F0079D879 /* NSString+escape.m in Sources */,
 				C3EC0976142A8802006C4789 /* Reachability.m in Sources */,
 				C3FC039D142D000E00AC300A /* stalker.xcdatamodeld in Sources */,
+				C3FC03A1142E04CD00AC300A /* PendingTrack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

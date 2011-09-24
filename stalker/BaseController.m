@@ -10,6 +10,15 @@
 
 @implementation BaseController
 
+-(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude {
+    NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
+                           latitude,
+                           longitude];
+    [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
+}
+
+// connections
+
 -(void) noConnectionAlert {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Connect" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];

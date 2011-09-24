@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NSString+escape.h"
 
 @interface BaseController : UIViewController {
     NSMutableData *responseData;
@@ -16,6 +17,8 @@
 //-(NSURL *) constructURL:(NSString *)path;
 -(void) asynchRequest:(NSString *)urlString withMethod:(NSString *)method withContentType:(NSString *)contentType withData:(NSString *)data;
 -(void) handleAsynchResponse:(id)data;
+
+-(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude;
 
 
 @end
