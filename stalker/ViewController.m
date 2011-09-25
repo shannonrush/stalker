@@ -13,6 +13,11 @@
 #pragma mark HTTP
 
 -(IBAction)predictLocation {
+    // send date to Ruby app for location and category prediction
+    
+}
+
+-(void)handleAsynchResponse:(id)data {
     
 }
 
