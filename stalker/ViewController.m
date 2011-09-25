@@ -14,7 +14,11 @@
 
 -(IBAction)predictLocation {
     // send date to Ruby app for location and category prediction
+    NSDate *date = [datePicker date];
     
+    NSString *dataString = [NSString stringWithFormat:@"date=%@",date];
+    NSString *urlString = [NSString stringWithFormat:@"%@/stalker_predictions.json",DOMAIN]; 
+    [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
 }
 
 -(void)handleAsynchResponse:(id)data {
