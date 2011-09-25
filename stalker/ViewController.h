@@ -10,26 +10,13 @@
 
 #import "BaseController.h"
 
-@class PendingTrack;
-@class Reachability;
-
-
-@interface ViewController : BaseController <CLLocationManagerDelegate> {
-    CLLocationManager *locationManager;
-    NSDate *lastLocationDate;
-    PendingTrack *pending;
-    Reachability* internetReachable;
-    Reachability* hostReachable;
-    BOOL internetActive;
-    BOOL hostActive;
+@interface ViewController : BaseController {
+    
+    IBOutlet UILabel *locationLabel;
+    IBOutlet UILabel *categoryLabel;
+    IBOutlet UIDatePicker *datePicker;
 }
 
-@property BOOL internetActive;
-@property BOOL hostActive;
-
--(void)initLocation;
--(void)initReachability;
--(void)checkNetworkStatus:(NSNotification *)notice;
-
+-(IBAction)predictLocation;
 
 @end
