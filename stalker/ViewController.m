@@ -116,7 +116,15 @@
                                     locationManager.location.coordinate.latitude,
                                     locationManager.location.coordinate.longitude,
                                        [NSDate date]];
-        [self sendTrackWithData:data WithDataString:dataString];
+        NSArray *destinations = [[data objectForKey:@"response"]objectForKey:@"venues"];
+        for (NSDictionary *destination in destinations) {
+            NSArray *categories = [destination objectForKey:@"categories"];
+            NSString *category = [categories count]>0 ? [[categories objectAtIndex:0]objectForKey:@"name"] : @"";
+            NSString *name = [destination objectForKey:@"name"];
+            [dataString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
+        }
+        NSString *urlString = [NSString stringWithFormat:@"%@/stalker_tracks.json",DOMAIN]; 
+        [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
     }
 }
 

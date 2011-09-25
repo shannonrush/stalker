@@ -78,16 +78,4 @@
     }
 }
 
-
-//[self sendTrackWithData:data WithDataString:dataString];
-//AppDelegate *appDelegate=[[UIApplication sharedApplication]delegate];
-//NSManagedObjectContext *context=[appDelegate managedObjectContext];
-//[context deleteObject:currentTrack];
-//NSError *error;
-//if (![context save:&error]) {
-//    NSLog(@"couldn't save because %@",[error description]);
-//} else  {
-//    NSLog(@"saved");
-//}
-
 @end

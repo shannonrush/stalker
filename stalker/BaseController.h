@@ -24,7 +24,6 @@ extern NSTimeInterval INTERVAL;
 -(void) handleAsynchResponse:(id)data;
 
 -(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude;
--(void)sendTrackWithData:(id)data WithDataString:(NSMutableString *)dataString;
 
 
 @end
