@@ -17,13 +17,15 @@
 @interface ViewController : BaseController <CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
     NSDate *lastLocationDate;
-    NSMutableArray *pendingTracks;
     PendingTrack *pending;
     Reachability* internetReachable;
     Reachability* hostReachable;
+    BOOL internetActive;
+    BOOL hostActive;
 }
 
-
+@property BOOL internetActive;
+@property BOOL hostActive;
 
 -(void)initLocation;
 -(void)initReachability;

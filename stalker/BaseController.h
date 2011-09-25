@@ -16,12 +16,7 @@ extern NSTimeInterval INTERVAL;
 
 @interface BaseController : UIViewController {
     NSMutableData *responseData;
-    BOOL internetActive;
-    BOOL hostActive;
 }
-
-@property BOOL internetActive;
-@property BOOL hostActive;
 
 -(void) noConnectionAlert;
 //-(NSURL *) constructURL:(NSString *)path;

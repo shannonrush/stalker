@@ -14,13 +14,13 @@
 
 @implementation ViewController
 
+@synthesize internetActive, hostActive;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initLocation];
     [self initReachability];
     pending = [[PendingTrack alloc]init];
-    pendingTracks = [[NSMutableArray alloc]init];
 }
 
 #pragma mark CLLocationManagerDelegate

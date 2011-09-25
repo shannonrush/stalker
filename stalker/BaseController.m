@@ -8,13 +8,10 @@
 
 #import "BaseController.h"
 
-NSString * const DOMAIN = @"http://10.0.1.17:3000";
+NSString * const DOMAIN = @"http://rushdevo.com";
 NSTimeInterval INTERVAL = -30;
 
 @implementation BaseController
-
-@synthesize internetActive, hostActive;
-
 
 -(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude {
     NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
