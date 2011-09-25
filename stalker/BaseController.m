@@ -8,13 +8,31 @@
 
 #import "BaseController.h"
 
+NSString * const DOMAIN = @"http://10.0.1.17:3000";
+NSTimeInterval INTERVAL = -30;
+
 @implementation BaseController
+
+@synthesize internetActive, hostActive;
+
 
 -(void)getDestinationInfoWithLatitude:(double)latitude WithLongitude:(double)longitude {
     NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&intent=checkin&limit=3&oauth_token=CF3ULZN4PBS3NFQVGICT1ABUNLALPKQH5TTHEEYY3U0CBMEI&v=20110918",
                            latitude,
                            longitude];
     [self asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
+}
+
+-(void)sendTrackWithData:(id)data WithDataString:(NSMutableString *)dataString {
+    NSArray *destinations = [[data objectForKey:@"response"]objectForKey:@"venues"];
+    for (NSDictionary *destination in destinations) {
+        NSArray *categories = [destination objectForKey:@"categories"];
+        NSString *category = [categories count]>0 ? [[categories objectAtIndex:0]objectForKey:@"name"] : @"";
+        NSString *name = [destination objectForKey:@"name"];
+        [dataString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
+    }
+    NSString *urlString = [NSString stringWithFormat:@"%@/stalker_tracks.json",DOMAIN]; 
+    [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
 }
 
 // connections
@@ -55,7 +73,6 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     NSMutableDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
-    NSLog(@"%@", data);
     [self handleAsynchResponse:data];
 }
 

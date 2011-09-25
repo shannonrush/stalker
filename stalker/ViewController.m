@@ -11,9 +11,9 @@
 #import "AppDelegate.h"
 #import "PendingTrack.h"
 
+
 @implementation ViewController
 
-@synthesize internetActive, hostActive;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -21,7 +21,6 @@
     [self initReachability];
     pending = [[PendingTrack alloc]init];
     pendingTracks = [[NSMutableArray alloc]init];
-
 }
 
 #pragma mark CLLocationManagerDelegate
@@ -32,13 +31,13 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager setDelegate:self];
     [locationManager startUpdatingLocation];
-    lastLocationDate = [[NSDate alloc]initWithTimeIntervalSinceNow:-300];
+    lastLocationDate = [[NSDate alloc]initWithTimeIntervalSinceNow:INTERVAL];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
     NSTimeInterval age = [newLocation.timestamp timeIntervalSinceNow];
     // make sure location is fresh and get new data only once every minute
-    if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < -300)  {
+    if (abs(age) < 60.0 && [lastLocationDate timeIntervalSinceNow] < INTERVAL)  {
         if (internetActive && hostActive) {
             [self getDestinationInfoWithLatitude:newLocation.coordinate.latitude WithLongitude:newLocation.coordinate.longitude];
         } else {
@@ -104,26 +103,10 @@
             break;
         }
     }
-    if (self.internetActive && self.hostActive && [self hasPendingTracks]) {
-        [pending performSelectorInBackground:@selector(sendTracks) withObject:pendingTracks];
-    }
+    if (self.internetActive && self.hostActive)
+        [pending processTracks];
 }
 
--(BOOL)hasPendingTracks {
-    AppDelegate *appDelegate=[[UIApplication sharedApplication]delegate];
-    NSManagedObjectContext *context=[appDelegate managedObjectContext];
-    NSEntityDescription *entityDesc=[NSEntityDescription entityForName:@"PendingTrack" inManagedObjectContext:context];
-    NSFetchRequest *request=[[NSFetchRequest alloc]init];
-    [request setEntity:entityDesc];
-    NSError *error;
-    NSArray *tracks=[context executeFetchRequest:request error:&error];
-    if ([tracks count]>0) {
-        [pendingTracks setArray:tracks];
-        return YES;
-    } else {
-        return NO;
-    }
-}
 
 #pragma mark HTTP
 
@@ -133,15 +116,7 @@
                                     locationManager.location.coordinate.latitude,
                                     locationManager.location.coordinate.longitude,
                                        [NSDate date]];
-        NSArray *destinations = [[data objectForKey:@"response"]objectForKey:@"venues"];
-        for (NSDictionary *destination in destinations) {
-            NSArray *categories = [destination objectForKey:@"categories"];
-            NSString *category = [categories count]>0 ? [[categories objectAtIndex:0]objectForKey:@"name"] : @"";
-            NSString *name = [destination objectForKey:@"name"];
-            [dataString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
-        }
-        NSString *urlString = @"http://10.0.1.17:3000/stalker_tracks.json";
-        [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
+        [self sendTrackWithData:data WithDataString:dataString];
     }
 }
 

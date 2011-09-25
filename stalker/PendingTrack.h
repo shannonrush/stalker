@@ -8,13 +8,13 @@
 
 #import "BaseController.h"
 
-NSManagedObject *currentTrack;
 
-@interface PendingTrack : BaseController 
+@interface PendingTrack : BaseController {
+    NSMutableDictionary *tracksToSave;
+}
 
-+(NSManagedObject *)currentTrack;
-+(void)setCurrentTrack:(NSManagedObject *)track;
-
+-(void)processTracks;
+-(void)sendTracks;
 -(void)savePendingTrackWithLatitude:(double)latitude WithLongitude:(double)longitude;
 
 @end

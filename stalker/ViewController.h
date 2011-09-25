@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
 
 #import "BaseController.h"
 
 @class PendingTrack;
 @class Reachability;
+
 
 @interface ViewController : BaseController <CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
@@ -21,17 +21,13 @@
     PendingTrack *pending;
     Reachability* internetReachable;
     Reachability* hostReachable;
-    BOOL internetActive;
-    BOOL hostActive;
 }
 
-@property BOOL internetActive;
-@property BOOL hostActive;
+
 
 -(void)initLocation;
 -(void)initReachability;
 -(void)checkNetworkStatus:(NSNotification *)notice;
--(BOOL)hasPendingTracks;
 
 
 @end
