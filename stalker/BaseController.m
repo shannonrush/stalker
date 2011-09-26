@@ -125,7 +125,7 @@ NSTimeInterval INTERVAL = -30;
 }
 
 -(void) asynchRequest:(NSString *)urlString withMethod:(NSString *)method withContentType:(NSString *)contentType withData:(NSString *)dataString {
-    NSURL *url = [NSURL URLWithString:urlString]; 
+    NSURL *url = [NSURL URLWithString:[urlString escapeString]]; 
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 	
 	if (dataString != nil && [dataString length] > 0) 
@@ -136,21 +136,7 @@ NSTimeInterval INTERVAL = -30;
 }
 
 -(void) handleAsynchResponse:(id)data {
-    if ([[data allKeys]containsObject:@"response"]) {
-        NSMutableString *dataString = [NSMutableString stringWithFormat:@"[stalker_track]stalker_user_id=1&[stalker_track]lat=%g&[stalker_track]lng=%g&[stalker_track]track_at=%@",
-                                       locationManager.location.coordinate.latitude,
-                                       locationManager.location.coordinate.longitude,
-                                       [NSDate date]];
-        NSArray *destinations = [[data objectForKey:@"response"]objectForKey:@"venues"];
-        for (NSDictionary *destination in destinations) {
-            NSArray *categories = [destination objectForKey:@"categories"];
-            NSString *category = [categories count]>0 ? [[categories objectAtIndex:0]objectForKey:@"name"] : @"";
-            NSString *name = [destination objectForKey:@"name"];
-            [dataString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
-        }
-        NSString *urlString = [NSString stringWithFormat:@"%@/stalker_tracks.json",DOMAIN]; 
-        [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
-    }
+
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
