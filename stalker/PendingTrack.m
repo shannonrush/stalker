@@ -33,36 +33,20 @@
     NSError *error;
     NSArray *tracks=[context executeFetchRequest:request error:&error];
     
-    tracksToSave = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSMutableArray array],@"destinationStrings",[NSMutableArray array],@"tracks",nil];
     for (NSManagedObject *track in tracks) {
-        NSString *latitude = [track valueForKey:@"lat"];
-        NSString *longitude = [track valueForKey:@"lng"];
-        NSDictionary *trackDict = [NSDictionary dictionaryWithObjectsAndKeys:latitude,@"lat",longitude,@"lng",[track valueForKey:@"trackAt"],@"trackAt",nil];
-        [[tracksToSave objectForKey:@"tracks"]addObject:trackDict];
-        [self getDestinationInfoWithLatitude:[latitude doubleValue] WithLongitude:[longitude doubleValue]];
-        [context deleteObject:track];
-        NSError *error;
-        [context save:&error];
+        NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?ll=%g,%g&limit=3&client_id=FW1Q1W4KGQCXCVNO25E4VWC0O4TSOMAA5D2VBSZUPKGIQXOM&client_secret=0AL5RBLTEORZ2GTX0TT20WD2P43NEBOUMB5234ENCQXH4333&v=20110927",[track valueForKey:@"lat"],[track valueForKey:@"lng"]];
+        AsynchRequest *asynch = [[AsynchRequest alloc]init];
+        asynch.controller = self;
+        asynch.managedObjectID = [track objectID];
+        [asynch asynchRequest:urlString withMethod:@"GET" withContentType:@"application/x-www-form-urlencoded" withData:nil];
     }
-}
-
--(void)sendTracks {
-    NSArray *tracks = [tracksToSave objectForKey:@"tracks"];
-    for (NSDictionary *track in tracks) {
-        NSMutableString *dataString = [NSMutableString stringWithFormat:@"[stalker_track]stalker_user_id=1&[stalker_track]lat=%@&[stalker_track]lng=%@&[stalker_track]track_at=%@",
-                                       [track valueForKey:@"lat"],
-                                       [track valueForKey:@"lng"],
-                                       [track valueForKey:@"trackAt"]];
-        NSString *destinationString = [[tracksToSave objectForKey:@"destinationStrings"]objectAtIndex:[tracks indexOfObject:track]];
-        [dataString appendString:destinationString];
-        NSString *urlString = [NSString stringWithFormat:@"%@/stalker_tracks.json",DOMAIN]; 
-        [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
-    }
-    tracksToSave = nil;
 }
 
 -(void) handleAsynchResponse:(id)data {
     if ([[data allKeys]containsObject:@"response"]) {
+        AppDelegate *appDelegate=[[UIApplication sharedApplication]delegate];
+        NSManagedObjectContext *context=[appDelegate managedObjectContext];
+        NSManagedObject *track = [context objectWithID:[data valueForKey:@"managedObjectID"]];
         NSMutableString *destinationString = [NSMutableString string];
         NSArray *destinations = [[data objectForKey:@"response"]objectForKey:@"venues"];
         for (NSDictionary *destination in destinations) {
@@ -71,10 +55,16 @@
             NSString *name = [destination objectForKey:@"name"];
             [destinationString appendFormat:@"&[stalker_track]stalker_destinations_attributes[][category]=%@&[stalker_track]stalker_destinations_attributes[][name]=%@",[category escapeString],[name escapeString]];
         }
-        [[tracksToSave objectForKey:@"destinationStrings"]addObject:destinationString];
-        if ([[tracksToSave objectForKey:@"destinationStrings"]count]==[[tracksToSave objectForKey:@"tracks"]count]) {
-            [self sendTracks];
-        }
+        NSMutableString *dataString = [NSMutableString stringWithFormat:@"[stalker_track]stalker_user_id=1&[stalker_track]lat=%@&[stalker_track]lng=%@&[stalker_track]track_at=%@",
+                                       [track valueForKey:@"lat"],
+                                       [track valueForKey:@"lng"],
+                                       [track valueForKey:@"trackAt"]];
+        [dataString appendString:destinationString];
+        NSString *urlString = [NSString stringWithFormat:@"%@/stalker_tracks.json",DOMAIN];
+        [self asynchRequest:urlString withMethod:@"POST" withContentType:@"application/x-www-form-urlencoded" withData:dataString];
+        [context deleteObject:track];
+        NSError *error;
+        [context save:&error];
     }
 }
 

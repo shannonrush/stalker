@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "NSString+escape.h"
+#import "AsynchRequest.h"
+
 
 extern NSString * const DOMAIN;
 extern NSTimeInterval INTERVAL;
@@ -17,7 +19,6 @@ extern NSTimeInterval INTERVAL;
 @class Reachability;
 
 @interface BaseController : UIViewController <CLLocationManagerDelegate> {
-    NSMutableData *responseData;
     CLLocationManager *locationManager;
     NSDate *lastLocationDate;
     PendingTrack *pending;
@@ -34,7 +35,6 @@ extern NSTimeInterval INTERVAL;
 -(void)initReachability;
 -(void)checkNetworkStatus:(NSNotification *)notice;
 
--(void) noConnectionAlert;
 -(void) asynchRequest:(NSString *)urlString withMethod:(NSString *)method withContentType:(NSString *)contentType withData:(NSString *)data;
 -(void) handleAsynchResponse:(id)data;
 

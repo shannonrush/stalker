@@ -9,12 +9,9 @@
 #import "BaseController.h"
 
 
-@interface PendingTrack : BaseController {
-    NSMutableDictionary *tracksToSave;
-}
+@interface PendingTrack : BaseController 
 
 -(void)processTracks;
--(void)sendTracks;
 -(void)savePendingTrackWithLatitude:(double)latitude WithLongitude:(double)longitude;
 
 @end
